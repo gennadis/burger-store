@@ -2,3 +2,4 @@ django
 django-debug-toolbar
 Pillow
 python-dotenv
+dj-database-url
