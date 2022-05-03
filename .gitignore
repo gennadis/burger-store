@@ -2,5 +2,11 @@
 __pycache__/
 venv
 env
-
 .env
+
+*.sqlite3
+
+bundles/**
+node_modules/
+media/
+.parcel-cache
