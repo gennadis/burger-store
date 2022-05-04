@@ -1,5 +1,9 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MinLengthValidator
+from django.core.validators import (
+    MinValueValidator,
+    MaxValueValidator,
+    MinLengthValidator,
+)
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -127,3 +131,29 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.first_name}, {self.address}"
+
+
+class OrderProduct(models.Model):
+    order = models.ForeignKey(
+        to=Order,
+        verbose_name="состав заказа",
+        related_name="products",
+        on_delete=models.CASCADE,
+    )
+    product = models.ForeignKey(
+        to=Product,
+        verbose_name="продукт",
+        related_name="products",
+        on_delete=models.CASCADE,
+    )
+    amount = models.PositiveSmallIntegerField(
+        verbose_name="количество",
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
+    )
+
+    class Meta:
+        verbose_name = "позиция заказа"
+        verbose_name_plural = "позиции заказа"
+
+    def __str__(self):
+        return f"{self.product} - {self.amount}"
