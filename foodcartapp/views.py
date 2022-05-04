@@ -117,6 +117,9 @@ def register_order(request):
             amount=product["amount"],
         )
 
-    return Response(
-        data=f"Order {order.id} placed successfully", status=status.HTTP_200_OK
-    )
+    response_data = serializer.data.copy()
+    response_data["id"] = order.id
+    for product in response_data["products"]:
+        product["product"] = Product.objects.get(pk=product["product"]).name
+
+    return Response(data=response_data, status=status.HTTP_200_OK)
