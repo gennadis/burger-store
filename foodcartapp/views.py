@@ -80,7 +80,11 @@ def register_order(request):
         address=order_details["address"],
     )
 
-    for product in order_details["products"]:
+    order_products = order_details.get("products")
+    if not isinstance(order_products, list) or not order_products:
+        return Response(data="Bad products!", status=status.HTTP_400_BAD_REQUEST)
+
+    for product in order_products:
         order_product = OrderProduct.objects.create(
             order=order,
             product=Product.objects.get(pk=product["product"]),
