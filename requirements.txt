@@ -3,3 +3,4 @@ django-debug-toolbar
 Pillow
 python-dotenv
 dj-database-url
+django-phonenumber-field==6.1.0
