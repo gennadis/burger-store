@@ -1,8 +1,11 @@
+from math import prod
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.templatetags.static import static
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+
 
 from .models import Order, OrderProduct, Product
 
@@ -73,22 +76,48 @@ def product_list_api(request):
 def register_order(request):
     order_details = request.data
 
-    order = Order.objects.create(
-        first_name=order_details["firstname"],
-        last_name=order_details["lastname"],
-        phone_number=order_details["phonenumber"],
-        address=order_details["address"],
-    )
+    if (
+        not all(
+            isinstance(x, str)
+            for x in [
+                order_details.get("firstname"),
+                order_details.get("lastname"),
+                order_details.get("phonenumber"),
+                order_details.get("address"),
+            ]
+        )
+        or len(order_details.get("phonenumber")) == 0
+    ):
+        return Response(data="Bad order details!", status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        order = Order.objects.create(
+            first_name=order_details["firstname"],
+            last_name=order_details["lastname"],
+            phone_number=order_details["phonenumber"],
+            address=order_details["address"],
+        )
+    except (
+        IntegrityError,
+        KeyError,
+    ):
+        return Response(data="Bad order details!", status=status.HTTP_400_BAD_REQUEST)
 
     order_products = order_details.get("products")
+
     if not isinstance(order_products, list) or not order_products:
         return Response(data="Bad products!", status=status.HTTP_400_BAD_REQUEST)
 
     for product in order_products:
-        order_product = OrderProduct.objects.create(
-            order=order,
-            product=Product.objects.get(pk=product["product"]),
-            amount=product["quantity"],
-        )
+        try:
+            order_product = OrderProduct.objects.create(
+                order=order,
+                product=Product.objects.get(pk=product["product"]),
+                amount=product["quantity"],
+            )
+        except Product.DoesNotExist:
+            return Response(
+                data="Product does not exist!", status=status.HTTP_400_BAD_REQUEST
+            )
 
     return Response(data="Order placed", status=status.HTTP_200_OK)
