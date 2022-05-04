@@ -120,3 +120,11 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderProductInline]
+    search_fields = [
+        "phone_number",
+    ]
+    list_display = [
+        "first_name",
+        "phone_number",
+        "address",
+    ]
