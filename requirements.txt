@@ -4,3 +4,4 @@ Pillow
 python-dotenv
 dj-database-url
 django-phonenumber-field==6.1.0
+phonenumbers==8.12.47
