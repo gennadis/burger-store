@@ -115,6 +115,7 @@ def register_order(request):
             order=order,
             product=product["product"],
             amount=product["amount"],
+            static_price=product["product"].price * product["amount"],
         )
 
     response_data = serializer.data.copy()
