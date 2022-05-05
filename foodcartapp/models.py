@@ -160,6 +160,12 @@ class OrderProduct(models.Model):
         verbose_name="количество",
         validators=[MinValueValidator(1), MaxValueValidator(10)],
     )
+    static_price = models.DecimalField(
+        verbose_name="Фиксированная стоимость",
+        max_digits=8,
+        decimal_places=2,
+        validators=[MinValueValidator(0)],
+    )
 
     class Meta:
         verbose_name = "позиция заказа"
