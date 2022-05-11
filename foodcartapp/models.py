@@ -1,3 +1,5 @@
+from enum import Enum, auto
+
 from django.db import models
 from django.core.validators import (
     MinValueValidator,
@@ -131,6 +133,24 @@ class Order(models.Model):
         verbose_name="адрес доставки",
         max_length=100,
         validators=[MinLengthValidator(10)],
+    )
+
+    NEW = 0
+    CONFIRMED = 1
+    COOKING = 2
+    DELIVERY = 3
+    FINISHED = 4
+    STATUS_CHOICES = [
+        (NEW, "Новый"),
+        (CONFIRMED, "Подтвержден"),
+        (COOKING, "Готовка"),
+        (DELIVERY, "Доставка"),
+        (FINISHED, "Выполнен"),
+    ]
+    status = models.PositiveSmallIntegerField(
+        choices=STATUS_CHOICES,
+        default=NEW,
+        db_index=True,
     )
 
     objects = OrderQuerySet.as_manager()
