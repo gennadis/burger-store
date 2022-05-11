@@ -83,6 +83,13 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def in_restaraunts(self):
+        restaurants = RestaurantMenuItem.objects.filter(
+            availability=True, product=self
+        ).values_list("restaurant")
+
+        return Restaurant.objects.filter(pk__in=restaurants)
+
 
 class RestaurantMenuItem(models.Model):
     restaurant = models.ForeignKey(
@@ -195,6 +202,22 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.first_name}, {self.address}"
+
+    def with_restaraunts(self):
+        order_products = OrderProduct.objects.filter(order=self).values_list(
+            "product", flat=True
+        )
+        products = Product.objects.filter(pk__in=order_products)
+
+        restaurants = []
+        for product in products:
+            restaurants.append(product.in_restaraunts())
+
+        result = set(restaurants[0])
+        for restaurant in restaurants[1:]:
+            result.intersection_update(restaurant)
+
+        return result
 
 
 class OrderProduct(models.Model):
