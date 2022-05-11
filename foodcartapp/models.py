@@ -134,6 +134,11 @@ class Order(models.Model):
         max_length=100,
         validators=[MinLengthValidator(10)],
     )
+    comment = models.CharField(
+        verbose_name="комментарий",
+        max_length=100,
+        blank=True,
+    )
 
     NEW = 0
     CONFIRMED = 1
