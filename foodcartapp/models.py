@@ -157,6 +157,18 @@ class Order(models.Model):
         db_index=True,
     )
 
+    CREDIT_CARD = 0
+    CASH = 1
+    PAYMENT_CHOICES = [
+        (CREDIT_CARD, "карта"),
+        (CASH, "наличные"),
+    ]
+    payment = models.PositiveSmallIntegerField(
+        choices=PAYMENT_CHOICES,
+        default=CASH,
+        db_index=True,
+    )
+
     registered_at = models.DateTimeField(
         verbose_name="оформлен",
         default=timezone.now,
