@@ -1,6 +1,5 @@
-from enum import Enum, auto
-
 from django.db import models
+from django.utils import timezone
 from django.core.validators import (
     MinValueValidator,
     MaxValueValidator,
@@ -156,6 +155,24 @@ class Order(models.Model):
         choices=STATUS_CHOICES,
         default=NEW,
         db_index=True,
+    )
+
+    registered_at = models.DateTimeField(
+        verbose_name="оформлен",
+        default=timezone.now,
+        db_index=True,
+    )
+    called_at = models.DateTimeField(
+        verbose_name="подтвержден",
+        db_index=True,
+        blank=True,
+        null=True,
+    )
+    delivered_at = models.DateTimeField(
+        verbose_name="доставлен",
+        db_index=True,
+        blank=True,
+        null=True,
     )
 
     objects = OrderQuerySet.as_manager()
