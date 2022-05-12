@@ -211,20 +211,18 @@ class Order(models.Model):
             .filter(product__in=order_products)
         )
 
-        products = [position.product for position in restaurant_products]
+        products = set(position.product for position in restaurant_products)
 
         restaurants = []
         for product in products:
-            restaurants_with_product = [
+            restaurants_with_product = set(
                 position.restaurant
                 for position in restaurant_products
                 if position.product == product
-            ]
+            )
             restaurants.append(restaurants_with_product)
 
-        restaurants_with_all_products = set(restaurants[0])
-        for restaurant in restaurants[1:]:
-            restaurants_with_all_products.intersection_update(restaurant)
+        restaurants_with_all_products = restaurants[0].intersection(*restaurants)
 
         return restaurants_with_all_products
 
