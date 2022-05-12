@@ -83,13 +83,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    def in_restaraunts(self):
-        restaurants = RestaurantMenuItem.objects.filter(
-            availability=True, product=self
-        ).values_list("restaurant")
-
-        return Restaurant.objects.filter(pk__in=restaurants)
-
 
 class RestaurantMenuItem(models.Model):
     restaurant = models.ForeignKey(
@@ -203,7 +196,7 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.first_name}, {self.address}"
 
-    def with_restaurants(self):
+    def get_suitable_restaurants(self):
         order_products = self.products.values("product")
         restaurant_products = (
             RestaurantMenuItem.objects.select_related("restaurant", "product")
@@ -222,9 +215,9 @@ class Order(models.Model):
             )
             restaurants.append(restaurants_with_product)
 
-        restaurants_with_all_products = restaurants[0].intersection(*restaurants)
+        suitable_restaurants = restaurants[0].intersection(*restaurants)
 
-        return restaurants_with_all_products
+        return suitable_restaurants
 
 
 class OrderProduct(models.Model):

@@ -38,7 +38,7 @@
       <td>
         <details>
           <summary>Рестораны</summary>
-          {% for restaurant in order.restaurants %}
+          {% for restaurant in order.get_suitable_restaurants %}
           <li>
             {{ restaurant.name }}
           </li>
