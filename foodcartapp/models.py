@@ -109,8 +109,34 @@ class RestaurantMenuItem(models.Model):
 
 
 class OrderQuerySet(models.QuerySet):
-    def with_total_price(self):
+    def with_total_prices(self):
         return self.annotate(total_price=Sum("products__static_price"))
+
+    # TODO refactor with annotate method
+    def with_restaurants(self):
+        for order in self:
+            order_products = order.products.values("product")
+            restaurant_products = (
+                RestaurantMenuItem.objects.select_related("restaurant", "product")
+                .filter(availability=True)
+                .filter(product__in=order_products)
+            )
+
+            products = set(position.product for position in restaurant_products)
+
+            restaurants = []
+            for product in products:
+                restaurants_with_product = set(
+                    position.restaurant
+                    for position in restaurant_products
+                    if position.product == product
+                )
+                restaurants.append(restaurants_with_product)
+
+            suitable_restaurants = restaurants[0].intersection(*restaurants)
+            order.suitable_restaurants = suitable_restaurants
+
+        return self
 
 
 class Order(models.Model):
@@ -200,29 +226,6 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.first_name}, {self.address}"
-
-    def get_suitable_restaurants(self):
-        order_products = self.products.values("product")
-        restaurant_products = (
-            RestaurantMenuItem.objects.select_related("restaurant", "product")
-            .filter(availability=True)
-            .filter(product__in=order_products)
-        )
-
-        products = set(position.product for position in restaurant_products)
-
-        restaurants = []
-        for product in products:
-            restaurants_with_product = set(
-                position.restaurant
-                for position in restaurant_products
-                if position.product == product
-            )
-            restaurants.append(restaurants_with_product)
-
-        suitable_restaurants = restaurants[0].intersection(*restaurants)
-
-        return suitable_restaurants
 
 
 class OrderProduct(models.Model):

@@ -41,7 +41,7 @@
         {% else %}
         <details>
           <summary>Рестораны</summary>
-          {% for restaurant in order.get_suitable_restaurants %}
+          {% for restaurant in order.suitable_restaurants %}
           <li>
             {{ restaurant.name }}
           </li>
