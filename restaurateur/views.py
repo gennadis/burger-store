@@ -116,8 +116,8 @@ def view_orders(request):
         request,
         template_name="order_items.html",
         context={
-            "orders": Order.objects.with_total_prices()
+            "orders": Order.objects.order_by("status")
+            .with_total_prices()
             .with_restaurants()
-            .order_by("status")
         },
     )
