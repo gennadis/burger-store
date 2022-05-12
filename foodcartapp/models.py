@@ -203,21 +203,30 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.first_name}, {self.address}"
 
-    def with_restaraunts(self):
-        order_products = OrderProduct.objects.filter(order=self).values_list(
-            "product", flat=True
+    def with_restaurants(self):
+        order_products = self.products.values("product")
+        restaurant_products = (
+            RestaurantMenuItem.objects.select_related("restaurant", "product")
+            .filter(availability=True)
+            .filter(product__in=order_products)
         )
-        products = Product.objects.filter(pk__in=order_products)
+
+        products = [position.product for position in restaurant_products]
 
         restaurants = []
         for product in products:
-            restaurants.append(product.in_restaraunts())
+            restaurants_with_product = [
+                position.restaurant
+                for position in restaurant_products
+                if position.product == product
+            ]
+            restaurants.append(restaurants_with_product)
 
-        result = set(restaurants[0])
+        restaurants_with_all_products = set(restaurants[0])
         for restaurant in restaurants[1:]:
-            result.intersection_update(restaurant)
+            restaurants_with_all_products.intersection_update(restaurant)
 
-        return result
+        return restaurants_with_all_products
 
 
 class OrderProduct(models.Model):
