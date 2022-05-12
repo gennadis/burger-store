@@ -115,5 +115,5 @@ def view_orders(request):
     return render(
         request,
         template_name="order_items.html",
-        context={"orders": Order.objects.new_orders_with_total_prices()},
+        context={"orders": Order.objects.with_total_price()},
     )
