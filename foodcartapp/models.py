@@ -168,7 +168,14 @@ class Order(models.Model):
         default=CASH,
         db_index=True,
     )
-
+    restaurant = models.ForeignKey(
+        Restaurant,
+        on_delete=models.CASCADE,
+        verbose_name="готовит",
+        related_name="orders",
+        null=True,
+        blank=True,
+    )
     registered_at = models.DateTimeField(
         verbose_name="оформлен",
         default=timezone.now,
