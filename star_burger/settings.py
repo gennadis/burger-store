@@ -12,6 +12,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
 SECRET_KEY = os.getenv("SECRET_KEY", "etirgvonenrfnoerngorenogneongg334g")
+YANDEX_APIKEY = os.getenv("YANDEX_APIKEY")
+
 DEBUG = os.getenv("DEBUG", True)
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ["127.0.0.1", "localhost"])
