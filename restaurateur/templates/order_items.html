@@ -36,17 +36,22 @@
       <td>{{ order.address }}</td>
       <td>{{ order.comment }}</td>
       <td>
+
         {% if order.restaurant %}
         <li>{{ order.restaurant }}</li>
-        {% else %}
+
+        {% elif order.suitable_restaurants_with_distances %}
         <details>
           <summary>Рестораны</summary>
-          {% for restaurant in order.suitable_restaurants %}
+          {% for restaurant, distance in order.suitable_restaurants_with_distances %}
           <li>
-            {{ restaurant.name }}
+            {{ restaurant.name }} - {{ distance|floatformat:2 }} км.
           </li>
           {% endfor %}
         </details>
+
+        {% else %}
+        <li>No suitable restaurants!</li>
         {% endif %}
       </td>
       <td><a
