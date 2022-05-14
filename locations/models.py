@@ -10,19 +10,27 @@ class Location(models.Model):
         max_length=200,
         unique=True,
     )
-    latitude = models.FloatField(
+    latitude = models.DecimalField(
         verbose_name="широта",
         validators=[
             MinValueValidator(-90),
             MaxValueValidator(90),
         ],
+        max_digits=6,
+        decimal_places=3,
+        null=True,
+        blank=True,
     )
-    longitude = models.FloatField(
+    longitude = models.DecimalField(
         verbose_name="долгота",
         validators=[
             MinValueValidator(-180),
             MaxValueValidator(180),
         ],
+        max_digits=6,
+        decimal_places=3,
+        null=True,
+        blank=True,
     )
     requested_at = models.DateTimeField(
         verbose_name="запрос координат осуществлен",
@@ -34,4 +42,4 @@ class Location(models.Model):
         verbose_name_plural = "локации"
 
     def __str__(self):
-        return f"{self.address}: ({self.longitude} {self.latitude})"
+        return self.address
