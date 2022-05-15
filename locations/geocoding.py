@@ -30,18 +30,19 @@ def calculate_distance(
     order_address: str,
     restaurant_address: str,
 ) -> float:
-    order_coordinates = Location.objects.get(address=order_address)
-    restaurant_coordinates = Location.objects.get(address=restaurant_address)
+    try:
+        order_coordinates = Location.objects.get(address=order_address)
+        restaurant_coordinates = Location.objects.get(address=restaurant_address)
 
-    if order_coordinates and restaurant_coordinates:
-        order_distance = distance.distance(
-            (order_coordinates.latitude, order_coordinates.longitude),
-            (restaurant_coordinates.latitude, restaurant_coordinates.longitude),
-        ).km
+    except Location.DoesNotExist:
+        order_coordinates = fetch_coordinates(order_address)
+        restaurant_coordinates = fetch_coordinates(restaurant_address)
+        order_distance = distance.distance(order_coordinates, restaurant_coordinates).km
+        return order_distance
 
-    # else:
-    #     order_coordinates = fetch_coordinates(order_address)
-    #     restaurant_coordinates = fetch_coordinates(restaurant_address)
-    #     order_distance = distance.distance(order_coordinates, restaurant_coordinates).km
+    order_distance = distance.distance(
+        (order_coordinates.latitude, order_coordinates.longitude),
+        (restaurant_coordinates.latitude, restaurant_coordinates.longitude),
+    ).km
 
     return order_distance
