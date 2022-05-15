@@ -9,6 +9,8 @@ from django.contrib.auth import views as auth_views
 
 
 from foodcartapp.models import Order, Product, Restaurant
+from locations.models import Location
+from locations.geocoding import fetch_coordinates
 
 
 class Login(forms.Form):
@@ -101,11 +103,28 @@ def view_products(request):
 
 @user_passes_test(is_manager, login_url="restaurateur:login")
 def view_restaurants(request):
+    restaurants = Restaurant.objects.all()
+    restaurants_addresses = restaurants.values_list("address", flat=True)
+    restaurants_addresses_with_locations = Location.objects.filter(
+        address__in=restaurants_addresses
+    ).values_list("address", flat=True)
+
+    for address in restaurants_addresses:
+        if address not in restaurants_addresses_with_locations:
+            latitude, longitude = fetch_coordinates(address)
+            Location.objects.create(
+                address=address,
+                longitude=longitude,
+                latitude=latitude,
+            )
+        else:
+            continue
+
     return render(
         request,
         template_name="restaurants_list.html",
         context={
-            "restaurants": Restaurant.objects.all(),
+            "restaurants": restaurants,
         },
     )
 
