@@ -1,16 +1,13 @@
 from django import forms
-from django.shortcuts import redirect, render
-from django.views import View
-from django.urls import reverse_lazy
-from django.contrib.auth.decorators import user_passes_test
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
-
-
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views import View
 from foodcartapp.models import Order, Product, Restaurant
-from locations.models import Location
 from locations.geocoding import fetch_coordinates
+from locations.models import Location
 
 
 class Login(forms.Form):

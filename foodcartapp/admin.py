@@ -5,12 +5,14 @@ from django.templatetags.static import static
 from django.utils.html import format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .models import Product
-from .models import ProductCategory
-from .models import Restaurant
-from .models import RestaurantMenuItem
-from .models import Order
-from .models import OrderProduct
+from .models import (
+    Order,
+    OrderProduct,
+    Product,
+    ProductCategory,
+    Restaurant,
+    RestaurantMenuItem,
+)
 
 
 class RestaurantMenuItemInline(admin.TabularInline):
