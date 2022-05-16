@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "asd123&*(HJK^&*990kLAPmD8")
 YANDEX_APIKEY = os.getenv("YANDEX_APIKEY")
 
 DEBUG = os.getenv("DEBUG", True)
