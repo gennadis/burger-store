@@ -21,33 +21,23 @@
 
 Скачайте код:
 ```sh
-git clone https://github.com/devmanorg/star-burger.git
+https://github.com/gennadis/burger-store.git
 ```
 
 Перейдите в каталог проекта:
 ```sh
-cd star-burger
+cd burger-store
 ```
-
-[Установите Python](https://www.python.org/), если этого ещё не сделали.
-
-Проверьте, что `python` установлен и корректно настроен. Запустите его в командной строке:
-```sh
-python --version
-```
-**Важно!** Версия Python должна быть не ниже 3.6.
-
-Возможно, вместо команды `python` здесь и в остальных инструкциях этого README придётся использовать `python3`. Зависит это от операционной системы и от того, установлен ли у вас Python старой второй версии. 
 
 В каталоге проекта создайте виртуальное окружение:
 ```sh
-python -m venv venv
+python3 -m venv venv
 ```
 Активируйте его. На разных операционных системах это делается разными командами:
 
-- Windows: `.\venv\Scripts\activate`
-- MacOS/Linux: `source venv/bin/activate`
-
+```sh
+source venv/bin/activate
+```
 
 Установите зависимости в виртуальное окружение:
 ```sh
@@ -78,13 +68,13 @@ python manage.py runserver
 
 ```sh
 nodejs --version
-# v12.18.2
+# v18.0.0
 # Если ошибка, попробуйте node:
 node --version
-# v12.18.2
+# v18.0.0
 
 npm --version
-# 6.14.5
+# 8.6.0
 ```
 
 Версия `nodejs` должна быть не младше 10.0. Версия `npm` не важна. Как обновить Node.js читайте в статье: [How to Update Node.js](https://phoenixnap.com/kb/update-node-js-version).
@@ -92,7 +82,7 @@ npm --version
 Перейдите в каталог проекта и установите пакеты Node.js:
 
 ```sh
-cd star-burger
+cd burger-store
 npm ci --dev
 ```
 
@@ -104,12 +94,6 @@ npm ci --dev
 
 ```sh
 ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
-```
-
-Если вы на Windows, то вам нужна та же команда, только с другими слешами в путях:
-
-```sh
-.\node_modules\.bin\parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
 ```
 
 Дождитесь завершения первичной сборки. Это вполне может занять 10 и более секунд. О готовности вы узнаете по сообщению в консоли:
