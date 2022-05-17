@@ -9,12 +9,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "asd123&*(HJK^&*990kLAPmD8")
+SECRET_KEY = os.getenv("SECRET_KEY")
 YANDEX_APIKEY = os.getenv("YANDEX_APIKEY")
 
-DEBUG = os.getenv("DEBUG", True)
+DEBUG = int(os.getenv("DEBUG", default=0))
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ["127.0.0.1", "localhost"])
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(" ")
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "CSRF_TRUSTED_ORIGINS", default="http://localhost"
+).split(" ")
 
 INSTALLED_APPS = [
     "locations.apps.LocationsConfig",

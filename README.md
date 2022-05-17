@@ -121,13 +121,13 @@ Parcel будет следить за файлами в каталоге `bundle
 ./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
 ```
 
-Настроить бэкенд: создать файл `.env` в каталоге `star_burger/` со следующими настройками:
+Настроить бэкенд: переименовать файл `.env.example` на `.env` в каталоге `star_burger/` и заполнить следующими настройками:
 
 - `DEBUG` — дебаг-режим. Поставьте `False`.
-- `DJANGO_SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте. Не стоит использовать значение по-умолчанию, **замените на своё**.
-- `YANDEX_APIKEY` — Токен Яндекс API для определения координат по адресу.
+- `SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте.
 - `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
-
+- `CSRF_TRUSTED_ORIGINS` – [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#csrf-trusted-origins)
+- `YANDEX_APIKEY` — Токен Яндекс API для определения координат по адресу.
 
 ## Цели проекта
 
