@@ -21,7 +21,7 @@
 
 Скачайте код:
 ```sh
-https://github.com/gennadis/burger-store.git
+git clone https://github.com/gennadis/burger-store.git
 ```
 
 Перейдите в каталог проекта:
