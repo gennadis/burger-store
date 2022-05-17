@@ -111,7 +111,7 @@ class RestaurantMenuItem(models.Model):
 
 class OrderQuerySet(models.QuerySet):
     def with_total_prices(self):
-        return self.annotate(total_price=Sum("products__static_price"))
+        return self.annotate(total_price=Sum("order_products__static_price"))
 
     def with_restaurants(self):
         for order in self:
