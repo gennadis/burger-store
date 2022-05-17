@@ -190,9 +190,9 @@ class Order(models.Model):
         max_length=100,
         validators=[MinLengthValidator(10)],
     )
-    comment = models.CharField(
+    comment = models.TextField(
         verbose_name="комментарий",
-        max_length=100,
+        max_length=500,
         blank=True,
     )
     status = models.PositiveSmallIntegerField(
