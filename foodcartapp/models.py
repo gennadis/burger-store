@@ -151,6 +151,28 @@ class OrderQuerySet(models.QuerySet):
 
 
 class Order(models.Model):
+    # Order status choices
+    NEW = 0
+    CONFIRMED = 1
+    COOKING = 2
+    DELIVERY = 3
+    FINISHED = 4
+    STATUS_CHOICES = [
+        (NEW, "Новый"),
+        (CONFIRMED, "Подтвержден"),
+        (COOKING, "Готовка"),
+        (DELIVERY, "Доставка"),
+        (FINISHED, "Выполнен"),
+    ]
+
+    # Payment choices
+    CREDIT_CARD = 0
+    CASH = 1
+    PAYMENT_CHOICES = [
+        (CREDIT_CARD, "карта"),
+        (CASH, "наличные"),
+    ]
+
     first_name = models.CharField(
         verbose_name="имя",
         max_length=20,
@@ -173,31 +195,11 @@ class Order(models.Model):
         max_length=100,
         blank=True,
     )
-
-    NEW = 0
-    CONFIRMED = 1
-    COOKING = 2
-    DELIVERY = 3
-    FINISHED = 4
-    STATUS_CHOICES = [
-        (NEW, "Новый"),
-        (CONFIRMED, "Подтвержден"),
-        (COOKING, "Готовка"),
-        (DELIVERY, "Доставка"),
-        (FINISHED, "Выполнен"),
-    ]
     status = models.PositiveSmallIntegerField(
         choices=STATUS_CHOICES,
         default=NEW,
         db_index=True,
     )
-
-    CREDIT_CARD = 0
-    CASH = 1
-    PAYMENT_CHOICES = [
-        (CREDIT_CARD, "карта"),
-        (CASH, "наличные"),
-    ]
     payment = models.PositiveSmallIntegerField(
         choices=PAYMENT_CHOICES,
         default=CASH,
