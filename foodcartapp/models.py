@@ -115,7 +115,7 @@ class OrderQuerySet(models.QuerySet):
 
     def with_restaurants(self):
         for order in self:
-            order_products = order.products.values("product")
+            order_products = order.order_products.values("product")
             restaurant_products = (
                 RestaurantMenuItem.objects.select_related("restaurant", "product")
                 .filter(availability=True)
@@ -244,13 +244,13 @@ class OrderProduct(models.Model):
     order = models.ForeignKey(
         to=Order,
         verbose_name="состав заказа",
-        related_name="products",
+        related_name="order_products",
         on_delete=models.CASCADE,
     )
     product = models.ForeignKey(
         to=Product,
         verbose_name="продукт",
-        related_name="products",
+        related_name="order_products",
         on_delete=models.CASCADE,
     )
     amount = models.PositiveSmallIntegerField(
