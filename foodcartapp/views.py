@@ -107,18 +107,18 @@ def register_order(request):
 
     order_address = serializer.validated_data["address"]
 
-    order = Order.objects.create(
-        first_name=serializer.validated_data["first_name"],
-        last_name=serializer.validated_data["last_name"],
-        phone_number=serializer.validated_data["phone_number"],
-        address=order_address,
-    )
-
     latitude, longitude = fetch_coordinates(order_address)
     place, created = Location.objects.get_or_create(
         address=order_address,
         longitude=longitude,
         latitude=latitude,
+    )
+    order = Order.objects.create(
+        first_name=serializer.validated_data["first_name"],
+        last_name=serializer.validated_data["last_name"],
+        phone_number=serializer.validated_data["phone_number"],
+        address=order_address,
+        location=place,
     )
 
     order_products = serializer.validated_data["products"]
