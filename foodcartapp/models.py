@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models import Sum
 from django.utils import timezone
 from locations.models import Location
+from geopy import distance
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -122,12 +123,12 @@ class OrderQuerySet(models.QuerySet):
         return self.annotate(total_price=Sum("order_products__static_price"))
 
     def with_restaurants(self):
-        orders = self.prefetch_related("order_products__product")
-        restaurant_menu_items = (
-            RestaurantMenuItem.objects.prefetch_related("product", "restaurant")
-            .filter(availability=True)
-            .only("product", "restaurant")
+        orders = self.prefetch_related("order_products__product").prefetch_related(
+            "location"
         )
+        restaurant_menu_items = RestaurantMenuItem.objects.prefetch_related(
+            "product", "restaurant", "restaurant__location"
+        ).filter(availability=True)
 
         # Build {Restaurant: set(Products)} dict
         restaurants_and_products = {
@@ -138,11 +139,20 @@ class OrderQuerySet(models.QuerySet):
 
         for order in orders:
             order_products = set(entry.product for entry in order.order_products.all())
+            order_coordinates = order.location.latitude, order.location.longitude
 
             order.suitable_restaurants = []
             for restaurant, products in restaurants_and_products.items():
                 if order_products.issubset(products):
-                    order.suitable_restaurants.append(restaurant)
+                    restaurant_coordinates = (
+                        restaurant.location.latitude,
+                        restaurant.location.longitude,
+                    )
+                    restaurant_distance = distance.distance(
+                        order_coordinates, restaurant_coordinates
+                    ).km
+
+                    order.suitable_restaurants.append((restaurant, restaurant_distance))
 
         return orders
 
