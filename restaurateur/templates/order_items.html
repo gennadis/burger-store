@@ -40,10 +40,10 @@
         {% if order.restaurant %}
         <li>{{ order.restaurant }}</li>
 
-        {% elif order.suitable_restaurants_with_distances %}
+        {% elif order.distances %}
         <details>
           <summary>Рестораны</summary>
-          {% for restaurant, distance in order.suitable_restaurants_with_distances %}
+          {% for restaurant, distance in order.distances %}
           <li>
             {{ restaurant.name }} - {{ distance|floatformat:2 }} км.
           </li>

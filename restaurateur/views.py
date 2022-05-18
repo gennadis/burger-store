@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from foodcartapp.models import Order, Product, Restaurant
-from locations.geocoding import fetch_coordinates
+from locations.geocoding import calculate_distance, fetch_coordinates
 from locations.models import Location
 
 
@@ -128,12 +128,21 @@ def view_restaurants(request):
 
 @user_passes_test(is_manager, login_url="restaurateur:login")
 def view_orders(request):
+    orders = Order.objects.order_by("status").with_total_prices().with_restaurants()
+
+    for order in orders:
+        order_distances = []
+        for restaurant in order.suitable_restaurants:
+            distance = calculate_distance(
+                order_address=order.address,
+                restaurant_address=restaurant.address,
+            )
+
+            order_distances.append((restaurant, distance))
+        order.distances = sorted(order_distances, key=lambda i: i[1])
+
     return render(
         request,
         template_name="order_items.html",
-        context={
-            "orders": Order.objects.order_by("status")
-            .with_total_prices()
-            .with_restaurants()
-        },
+        context={"orders": orders},
     )
