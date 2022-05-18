@@ -6,7 +6,7 @@ from django.core.validators import (
 from django.db import models
 from django.db.models import Sum
 from django.utils import timezone
-from locations import geocoding
+from locations.models import Location
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -15,6 +15,14 @@ class Restaurant(models.Model):
     address = models.CharField(
         "адрес",
         max_length=100,
+        blank=True,
+    )
+    location = models.ForeignKey(
+        to=Location,
+        verbose_name="локация",
+        on_delete=models.SET_NULL,
+        related_name="restaurants",
+        null=True,
         blank=True,
     )
     contact_phone = models.CharField(
@@ -178,6 +186,14 @@ class Order(models.Model):
         verbose_name="адрес доставки",
         max_length=100,
         validators=[MinLengthValidator(10)],
+    )
+    location = models.ForeignKey(
+        to=Location,
+        verbose_name="локация",
+        on_delete=models.SET_NULL,
+        related_name="orders",
+        null=True,
+        blank=True,
     )
     comment = models.TextField(
         verbose_name="комментарий",
