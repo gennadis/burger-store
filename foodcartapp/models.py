@@ -121,6 +121,7 @@ class OrderQuerySet(models.QuerySet):
             .only("product", "restaurant")
         )
 
+        # Build {Restaurant: set(Products)} dict
         restaurants_and_products = {
             entry.restaurant: set() for entry in restaurant_menu_items
         }
@@ -128,7 +129,7 @@ class OrderQuerySet(models.QuerySet):
             restaurants_and_products[entry.restaurant].add(entry.product)
 
         for order in orders:
-            order_products = set(x.product for x in order.order_products.all())
+            order_products = set(entry.product for entry in order.order_products.all())
 
             order.suitable_restaurants = []
             for restaurant, products in restaurants_and_products.items():
