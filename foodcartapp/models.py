@@ -114,40 +114,28 @@ class OrderQuerySet(models.QuerySet):
         return self.annotate(total_price=Sum("order_products__static_price"))
 
     def with_restaurants(self):
-        for order in self:
-            order_products = order.order_products.values("product")
-            restaurant_products = (
-                RestaurantMenuItem.objects.select_related("restaurant", "product")
-                .filter(availability=True)
-                .filter(product__in=order_products)
-            )
+        orders = self.prefetch_related("order_products__product")
+        restaurant_menu_items = (
+            RestaurantMenuItem.objects.prefetch_related("product", "restaurant")
+            .filter(availability=True)
+            .only("product", "restaurant")
+        )
 
-            products = set(position.product for position in restaurant_products)
+        restaurants_and_products = {
+            entry.restaurant: set() for entry in restaurant_menu_items
+        }
+        for entry in restaurant_menu_items:
+            restaurants_and_products[entry.restaurant].add(entry.product)
 
-            restaurants = []
-            for product in products:
-                restaurants_with_product = set(
-                    position.restaurant
-                    for position in restaurant_products
-                    if position.product == product
-                )
-                restaurants.append(restaurants_with_product)
+        for order in orders:
+            order_products = set(x.product for x in order.order_products.all())
 
-            suitable_restaurants = restaurants[0].intersection(*restaurants)
+            order.suitable_restaurants = []
+            for restaurant, products in restaurants_and_products.items():
+                if order_products.issubset(products):
+                    order.suitable_restaurants.append(restaurant)
 
-            suitable_restaurants_with_distances = []
-            for restaurant in suitable_restaurants:
-                distance = geocoding.calculate_distance(
-                    order_address=order.address,
-                    restaurant_address=restaurant.address,
-                )
-                suitable_restaurants_with_distances.append((restaurant, distance))
-
-            order.suitable_restaurants_with_distances = sorted(
-                suitable_restaurants_with_distances, key=lambda pair: pair[1]
-            )
-
-        return self
+        return orders
 
 
 class Order(models.Model):
