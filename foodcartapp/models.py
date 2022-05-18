@@ -202,6 +202,7 @@ class Order(models.Model):
     )
     payment = models.PositiveSmallIntegerField(
         choices=PAYMENT_CHOICES,
+        default=CREDIT_CARD,
         db_index=True,
     )
     restaurant = models.ForeignKey(
