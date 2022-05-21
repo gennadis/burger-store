@@ -50,6 +50,18 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
+Переименовать файл `.env.example` на `.env`
+```sh
+mv .env.example .env
+```
+и заполнить следующими настройками:
+
+- `DEBUG` — дебаг-режим, поставьте `0` или `1` соответственно
+- `SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте.
+- `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
+- `CSRF_TRUSTED_ORIGINS` – [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#csrf-trusted-origins)
+- `YANDEX_APIKEY` — Токен Яндекс API для определения координат по адресу.
+
 Запустите сервер:
 
 ```sh
@@ -57,6 +69,7 @@ python manage.py runserver
 ```
 
 Откройте сайт в браузере по адресу [http://127.0.0.1:8000/](http://127.0.0.1:8000/). Если вы увидели пустую белую страницу, то не пугайтесь, выдохните. Просто фронтенд пока ещё не собран. Переходите к следующему разделу README.
+
 
 ### Собрать фронтенд
 
@@ -79,10 +92,9 @@ npm --version
 
 Версия `nodejs` должна быть не младше 10.0. Версия `npm` не важна. Как обновить Node.js читайте в статье: [How to Update Node.js](https://phoenixnap.com/kb/update-node-js-version).
 
-Перейдите в каталог проекта и установите пакеты Node.js:
+Установите пакеты Node.js:
 
 ```sh
-cd burger-store
 npm ci --dev
 ```
 
@@ -120,14 +132,6 @@ Parcel будет следить за файлами в каталоге `bundle
 ```sh
 ./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
 ```
-
-Настроить бэкенд: переименовать файл `.env.example` на `.env` в каталоге `star_burger/` и заполнить следующими настройками:
-
-- `DEBUG` — дебаг-режим. Поставьте `False`.
-- `SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте.
-- `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
-- `CSRF_TRUSTED_ORIGINS` – [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#csrf-trusted-origins)
-- `YANDEX_APIKEY` — Токен Яндекс API для определения координат по адресу.
 
 ## Цели проекта
 
