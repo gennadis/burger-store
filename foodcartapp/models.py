@@ -6,9 +6,10 @@ from django.core.validators import (
 from django.db import models
 from django.db.models import Sum
 from django.utils import timezone
-from locations.models import Location
 from geopy import distance
 from phonenumber_field.modelfields import PhoneNumberField
+
+from locations.models import Location
 
 
 class Restaurant(models.Model):
