@@ -124,12 +124,14 @@ class OrderQuerySet(models.QuerySet):
         return self.annotate(total_price=Sum("order_products__static_price"))
 
     def with_restaurants(self):
-        orders = self.prefetch_related("order_products__product").prefetch_related(
-            "location"
+        orders = self.select_related("restaurant", "location").prefetch_related(
+            "order_products__product"
         )
-        restaurant_menu_items = RestaurantMenuItem.objects.prefetch_related(
-            "product", "restaurant", "restaurant__location"
-        ).filter(availability=True)
+        restaurant_menu_items = (
+            RestaurantMenuItem.objects.prefetch_related("restaurant__location")
+            .select_related("product")
+            .filter(availability=True)
+        )
 
         # Build {Restaurant: set(Products)} dict
         restaurants_and_products = {
