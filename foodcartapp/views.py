@@ -1,15 +1,15 @@
 from django.db import transaction
 from django.http import JsonResponse
 from django.templatetags.static import static
-from locations.geocoding import fetch_coordinates
-from locations.models import Location
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.serializers import CharField, IntegerField, ModelSerializer
 
-from .models import Order, OrderProduct, Product
+from foodcartapp.models import Order, OrderProduct, Product
+from locations.geocoding import fetch_coordinates
+from locations.models import Location
 
 
 def banners_list_api(request):

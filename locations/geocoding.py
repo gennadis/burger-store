@@ -1,8 +1,5 @@
 import requests
 from django.conf import settings
-from geopy import distance
-
-from locations.models import Location
 
 
 def fetch_coordinates(address: str):
