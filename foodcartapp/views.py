@@ -122,14 +122,16 @@ def register_order(request):
     )
 
     order_products = serializer.validated_data["products"]
-
-    for product in order_products:
-        order_product = OrderProduct.objects.create(
+    order_products_instances = [
+        OrderProduct(
             order=order,
             product=product["product"],
             amount=product["amount"],
             static_price=product["product"].price * product["amount"],
         )
+        for product in order_products
+    ]
+    OrderProduct.objects.bulk_create(order_products_instances)
 
     response_data = serializer.data.copy()
     response_data["id"] = order.id
