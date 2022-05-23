@@ -12,7 +12,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 SECRET_KEY = os.getenv("SECRET_KEY")
 YANDEX_APIKEY = os.getenv("YANDEX_APIKEY")
 
-DEBUG = int(os.getenv("DEBUG", default=0))
+DEBUG = os.getenv("DEBUG", default="False").lower() == "true"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(" ")
 CSRF_TRUSTED_ORIGINS = os.getenv(
