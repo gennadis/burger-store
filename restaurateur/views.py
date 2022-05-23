@@ -129,7 +129,12 @@ def view_restaurants(request):
 
 @user_passes_test(is_manager, login_url="restaurateur:login")
 def view_orders(request):
-    orders = Order.objects.order_by("status").with_total_prices().with_restaurants()
+    orders = (
+        Order.objects.order_by("status")
+        .with_total_prices()
+        .with_restaurants()
+        .with_distances()
+    )
 
     return render(
         request,

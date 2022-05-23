@@ -142,22 +142,40 @@ class OrderQuerySet(models.QuerySet):
 
         for order in orders:
             order_products = set(entry.product for entry in order.order_products.all())
-            order_coordinates = order.location.latitude, order.location.longitude
 
             order.suitable_restaurants = []
             for restaurant, products in restaurants_and_products.items():
                 if order_products.issubset(products):
-                    restaurant_coordinates = (
-                        restaurant.location.latitude,
-                        restaurant.location.longitude,
-                    )
-                    restaurant_distance = distance.distance(
-                        order_coordinates, restaurant_coordinates
-                    ).km
-
-                    order.suitable_restaurants.append((restaurant, restaurant_distance))
+                    order.suitable_restaurants.append(restaurant)
 
         return orders
+
+    def with_distances(self):
+        # Use only after `with_restaurants()` QuerySet method:
+        # orders must have `suitable_restaurants`.
+
+        for order in self:
+            order_coordinates = order.location.latitude, order.location.longitude
+            suitable_restaurants_with_distances = []
+
+            for restaurant in order.suitable_restaurants:
+                restaurant_coordinates = (
+                    restaurant.location.latitude,
+                    restaurant.location.longitude,
+                )
+                restaurant_distance = distance.distance(
+                    order_coordinates, restaurant_coordinates
+                ).km
+
+                suitable_restaurants_with_distances.append(
+                    (restaurant, restaurant_distance)
+                )
+
+            order.suitable_restaurants_with_distances = (
+                suitable_restaurants_with_distances
+            )
+
+        return self
 
 
 class Order(models.Model):
