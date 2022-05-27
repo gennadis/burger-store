@@ -12,7 +12,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", default="False").lower() == "true"
 YANDEX_APIKEY = os.getenv("YANDEX_APIKEY")
-ROLLBAR_TOKEN = os.getenv("ROLLBAR_TOKEN")
+ROLLBAR_TOKEN = os.getenv("ROLLBAR_TOKEN", default="")
+ROLLBAR_ENVIRONMENT = os.getenv("ROLLBAR_ENVIRONMENT", default="development")
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(" ")
 CSRF_TRUSTED_ORIGINS = os.getenv(
@@ -21,8 +22,9 @@ CSRF_TRUSTED_ORIGINS = os.getenv(
 
 ROLLBAR = {
     "access_token": ROLLBAR_TOKEN,
-    "environment": "development" if DEBUG else "production",
+    "environment": ROLLBAR_ENVIRONMENT,
     "root": BASE_DIR,
+    "enabled": bool(ROLLBAR_TOKEN),
 }
 
 rollbar.init(**ROLLBAR)
