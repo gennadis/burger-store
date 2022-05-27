@@ -61,6 +61,8 @@ mv .env.example .env
 - `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
 - `CSRF_TRUSTED_ORIGINS` – [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#csrf-trusted-origins)
 - `YANDEX_APIKEY` — Токен Яндекс API для определения координат по адресу.
+- `ROLLBAR_TOKEN` — Токен [Rollbar](rollbar.com) для трекинга ошибок.
+- `ROLLBAR_ENVIRONMENT` - Любое удобное название окружения: development, production, stage, test, прочее.
 
 Запустите сервер:
 
