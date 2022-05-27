@@ -1,6 +1,7 @@
 import os
 
 import dj_database_url
+import rollbar
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -8,16 +9,23 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-
 SECRET_KEY = os.getenv("SECRET_KEY")
-YANDEX_APIKEY = os.getenv("YANDEX_APIKEY")
-
 DEBUG = os.getenv("DEBUG", default="False").lower() == "true"
+YANDEX_APIKEY = os.getenv("YANDEX_APIKEY")
+ROLLBAR_TOKEN = os.getenv("ROLLBAR_TOKEN")
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(" ")
 CSRF_TRUSTED_ORIGINS = os.getenv(
     "CSRF_TRUSTED_ORIGINS", default="http://localhost"
 ).split(" ")
+
+ROLLBAR = {
+    "access_token": ROLLBAR_TOKEN,
+    "environment": "development" if DEBUG else "production",
+    "root": BASE_DIR,
+}
+
+rollbar.init(**ROLLBAR)
 
 INSTALLED_APPS = [
     "locations.apps.LocationsConfig",
@@ -43,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "rollbar.contrib.django.middleware.RollbarNotifierMiddlewareExcluding404",
 ]
 
 ROOT_URLCONF = "star_burger.urls"
