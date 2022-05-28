@@ -63,6 +63,7 @@ mv .env.example .env
 - `YANDEX_APIKEY` — Токен Яндекс API для определения координат по адресу.
 - `ROLLBAR_TOKEN` — Токен [Rollbar](rollbar.com) для трекинга ошибок.
 - `ROLLBAR_ENVIRONMENT` - Любое удобное название окружения: development, production, stage, test, прочее.
+- `DATABASE_URL` - URL базы данных типа: postgres://USER:PASSWORD@HOST:PORT/NAME [dj-database-url](https://github.com/jazzband/dj-database-url#url-schema)
 
 Запустите сервер:
 

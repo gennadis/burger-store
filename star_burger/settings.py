@@ -11,6 +11,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", default="False").lower() == "true"
+DATABASE_URL = os.getenv("DATABASE_URL")
 YANDEX_APIKEY = os.getenv("YANDEX_APIKEY")
 ROLLBAR_TOKEN = os.getenv("ROLLBAR_TOKEN", default="")
 ROLLBAR_ENVIRONMENT = os.getenv("ROLLBAR_ENVIRONMENT", default="development")
@@ -97,9 +98,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
 DATABASES = {
-    "default": dj_database_url.config(
-        default="sqlite:////{0}".format(os.path.join(BASE_DIR, "db.sqlite3"))
-    )
+    "default": dj_database_url.config(default=DATABASE_URL),
 }
 
 AUTH_PASSWORD_VALIDATORS = [
