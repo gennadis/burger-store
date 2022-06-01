@@ -9,4 +9,5 @@ env
 bundles/**
 node_modules/
 media/
+staticfiles/
 .parcel-cache
