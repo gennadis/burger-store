@@ -7,7 +7,7 @@ git pull
 echo '2. Installing project requirements...'
 source venv/bin/activate
 pip install -r requirements.txt
-npm ci --dev
+npm ci --include=dev
 
 echo '3. Building frontend...'
 ./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"

@@ -98,7 +98,7 @@ npm --version
 Установите пакеты Node.js:
 
 ```sh
-npm ci --dev
+npm ci --include=dev
 ```
 
 Команда `npm ci` создаст каталог `node_modules` и установит туда пакеты Node.js. Получится аналог виртуального окружения как для Python, но для Node.js.
@@ -135,7 +135,9 @@ Parcel будет следить за файлами в каталоге `bundle
 ```sh
 ./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
 ```
+
 ## Автоматический деплой сайта
+
 Для удобства также возможно использование bash скрипта для автоматического деплоя – `deploy.sh` сделает следующее:
 
 - Обновит код репозитория
