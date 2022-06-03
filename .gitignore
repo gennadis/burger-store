@@ -11,3 +11,4 @@ node_modules/
 media/
 staticfiles/
 .parcel-cache
+package-lock.json
