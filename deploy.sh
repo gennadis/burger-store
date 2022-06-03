@@ -16,7 +16,7 @@ echo '4. Collecting static files...'
 python manage.py collectstatic --noinput
 
 echo '5. Applying migrations...'
-python manage.py migrate
+python manage.py migrate --noinput
 
 echo '6. Reloading systemd daemons...'
 sudo systemctl reload nginx
